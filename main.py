@@ -1,5 +1,6 @@
 import json
-from os.path import dirname, abspath, join
+from os.path import dirname, abspath, join, exists
+from os import makedirs
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -9,7 +10,9 @@ current_dir = dirname(abspath(__file__))
 wellknown_path = join(current_dir, ".well-known")
 historical_data = join(current_dir, "weather.json")
 
-app = FastAPI()
+if not exists(wellknown_path):
+    makedirs(wellknown_path)
+app.mount("/.well-known", StaticFiles(directory=wellknown_path), name="static")
 app.mount("/.well-known", StaticFiles(directory=wellknown_path), name="static")
 
 
