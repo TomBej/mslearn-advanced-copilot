@@ -13,7 +13,12 @@ historical_data = join(current_dir, "weather.json")
 if not exists(wellknown_path):
     makedirs(wellknown_path)
 app.mount("/.well-known", StaticFiles(directory=wellknown_path), name="static")
-app.mount("/.well-known", StaticFiles(directory=wellknown_path), name="static")
+@app.get('/countries/{country}')
+def cities(country: str):
+    """
+    Returns the list of cities for a given country/region.
+    """
+    return list(data[country].keys())
 
 
 # load historical json data and serialize it:
